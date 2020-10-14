@@ -11,17 +11,36 @@ namespace SubscriptionTracker.Models
     public class User
     {
         [Key]
-        [Required]
+        [Display(Name = "Email ID")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Email is required")]
+        [DataType(DataType.EmailAddress)]
         public string EmailId { get; set; }
+
+
         [Required]
+        [Display(Name = "Username")]
         public string UserName { get; set; }
+
+
         [Required]
+        [Display(Name = "Phone No")]
         public string PhoneNo { get; set; }
-        [Required]
+
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Password Required")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-        //[NotMapped]
-        //[Required]
-        //[Compare("Password")]
-        //public string ConfirmPassword { get; set; }
+
+
+        [NotMapped]
+        [Required]
+        [Display(Name = "Confirm Password")]
+        [Compare("Password")]
+        public string ConfirmPassword { get; set; }
+
+
+        [NotMapped]
+        [Display(Name = "Remember me")]
+        public bool RememerMe { get; set; }
     }
 }
