@@ -50,7 +50,7 @@ namespace SubscriptionTracker.Controllers
                     Status = true;
                 }
                 #endregion
-                //SendEmail(userRegister.EmailId);
+                SendEmail(userRegister.EmailId);
 
             }
             else
@@ -141,11 +141,11 @@ namespace SubscriptionTracker.Controllers
         [NonAction]
         public void SendEmail(string EmailId)
         {
-            var from = new MailAddress("agrawalsanskriti00@gmail.com", "Santander UK ");
+            var from = new MailAddress("trackersubscription@gmail.com", "SubTracker");
             var to = new MailAddress(EmailId);
-            var frompw = "Sanskriti7691807047";
+            var frompw = "subscriptionTracker123";
             string sub = "your account is successfully created";
-            string body = "<br/><br/>We are excited to tell you that your account is successfully created on <strong>Santander UK</strong>" +
+            string body = "<br/><br/>We are excited to tell you that your account is successfully created on <strong>SubTracker</strong>" +
                        "<br/><br/> Congratulations!!";
             var smtp = new SmtpClient
             {
