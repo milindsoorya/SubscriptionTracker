@@ -36,6 +36,7 @@ namespace SubscriptionTracker.Models
         [Required]
         [Display(Name = "Confirm Password")]
         [Compare("Password")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
 

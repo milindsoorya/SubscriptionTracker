@@ -6,7 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Net.Mail;
+using System.Web.Security;
 using SubscriptionTracker.Models;
+
 
 namespace SubscriptionTracker.Controllers
 {
@@ -50,10 +53,15 @@ namespace SubscriptionTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                service.EndDate = service.StartDate.AddMonths(service.BillingTerm);
+                string UserEmail = Session["Emailid"].ToString();
+                service.User = db.UsersTable.Where(a => a.EmailId == UserEmail).FirstOrDefault();
+
                 db.ServicesTable.Add(service);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
 
             return View(service);
         }
@@ -123,5 +131,38 @@ namespace SubscriptionTracker.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+        public ActionResult FileUpload(HttpPostedFileBase file)
+        {
+            if (file != null)
+            {
+                SubTrackerContext db = new SubTrackerContext();
+                string ImageName = System.IO.Path.GetFileName(file.FileName);
+                string physicalPath = Server.MapPath("~/Pics/" + ImageName);
+                file.SaveAs(physicalPath);
+
+                Service service = new Service();
+
+                string UserEmail = Session["Emailid"].ToString();
+                service.User = db.UsersTable.Where(a => a.EmailId == UserEmail).FirstOrDefault();
+
+                service.BillingTerm = Int32.Parse(Request.Form["BillingTerm"]);
+                service.LogoUrl = ImageName;
+                service.PlanStatus = "Active";
+                service.Pricing = decimal.Parse(Request.Form["Pricing"]);
+                service.ServiceName = Request.Form["ServiceName"];
+                service.ServiceType = Request.Form["ServiceType"];
+                service.StartDate = DateTime.Parse(Request.Form["StartDate"]);
+                service.EndDate = service.StartDate.AddMonths(service.BillingTerm);
+
+
+                db.ServicesTable.Add(service);
+                db.SaveChanges();
+
+            }
+            return RedirectToAction("Index");
+        }
+
     }
 }
