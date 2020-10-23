@@ -18,9 +18,30 @@ namespace SubscriptionTracker.Controllers
         private SubTrackerContext db = new SubTrackerContext();
 
         // GET: Services
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string searchString)
         {
-            return View(db.ServicesTable.ToList());
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.MoneySortParm = sortOrder == "Money" ? "money_desc" : "Money";
+            var services = from s in db.ServicesTable
+                           select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                services = services.Where(s => s.ServiceType.Contains(searchString)
+                                       || s.ServiceName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "Date":
+                    services = services.OrderBy(s => s.EndDate);
+                    break;
+                case "Money":
+                    services = services.OrderBy(s => s.Pricing);
+                    break;
+                default:
+                    services = services.OrderBy(s => s.StartDate);
+                    break;
+            }
+            return View(services.ToList());
         }
 
         // GET: Services/Details/5

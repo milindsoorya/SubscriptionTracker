@@ -17,10 +17,12 @@ namespace SubscriptionTracker.Models
         public string ServiceName { get; set; }
         
         public string LogoUrl { get; set; }
-        [Required]
+        
         public string PlanStatus { get; set; }
+
         [Required]
         public int BillingTerm { get; set; }
+
         [Required]
         public decimal Pricing { get; set; }
 
@@ -33,7 +35,9 @@ namespace SubscriptionTracker.Models
 
         [Required]
         public virtual User User { get; set; }
-        
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
     }
 }
